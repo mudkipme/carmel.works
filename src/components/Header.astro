@@ -15,8 +15,8 @@ const github = site.socials.find((s) => s.href.includes("github.com"));
     </a>
 
     <nav class="nav" aria-label="Primary">
-      <a href="#apps">Apps</a>
-      <a href="#about">About</a>
+      <a class="nav-anchor" href="#apps">Apps</a>
+      <a class="nav-anchor" href="#about">About</a>
       {blog && (
         <a href={blog.href} target="_blank" rel="noopener noreferrer">Blog</a>
       )}
@@ -88,6 +88,8 @@ const github = site.socials.find((s) => s.href.includes("github.com"));
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
+    white-space: nowrap;
     text-decoration: none;
     font-weight: 650;
     font-size: 0.98rem;
@@ -161,7 +163,11 @@ const github = site.socials.find((s) => s.href.includes("github.com"));
     display: none;
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 560px) {
+    .nav-anchor {
+      display: none;
+    }
+
     .nav a:not(.icon-btn) {
       padding: 6px 8px;
       font-size: 0.875rem;
