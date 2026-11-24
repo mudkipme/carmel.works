@@ -1,0 +1,182 @@
+---
+import { site } from "../data/site";
+---
+
+<section id="about" class="about-section">
+  <div class="wrap about-grid">
+    <div class="about-copy">
+      <h2>About</h2>
+      <p>
+        I’m <strong>{site.creator}</strong>. I build small, open-source apps meant to run on your
+        own devices and homelab servers — keeping your notes, libraries, and data in formats you
+        control.
+      </p>
+      <p>
+        Most of these started from my own hobbies: self-hosting, anime, video games, music, and
+        collecting things worth remembering.
+      </p>
+
+      <ul class="topics" aria-label="Topics">
+        {site.topics.map((topic) => (
+          <li>
+            <i class={`dot-${topic.color}`} aria-hidden="true"></i>
+            <span>{topic.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <ul class="directory" aria-label="Links">
+      {site.socials.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            target="_blank"
+            rel={item.rel ? `${item.rel} noopener noreferrer` : "noopener noreferrer"}
+          >
+            <span class="dir-name">{item.label}</span>
+            <span class="dir-handle">{item.handle}</span>
+            <svg class="dir-arrow" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 11 11 5M6 5h5v5"></path>
+            </svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: clamp(56px, 8vw, 92px) 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.95fr);
+    gap: clamp(28px, 6vw, 64px);
+    align-items: start;
+  }
+
+  .about-copy h2 {
+    font-size: clamp(1.5rem, 3vw, 1.85rem);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .about-copy p {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    line-height: 1.7;
+    max-width: 54ch;
+  }
+
+  .about-copy p + p {
+    margin-top: 12px;
+  }
+
+  .about-copy strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+  }
+
+  .topics li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+  }
+
+  .topics i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .dot-sky { background: var(--pop-sky); }
+  .dot-mint { background: var(--pop-mint); }
+  .dot-amber { background: var(--pop-amber); }
+  .dot-coral { background: var(--pop-coral); }
+  .dot-violet { background: var(--pop-violet); }
+
+  .directory {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .directory li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .directory a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 4px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .dir-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .dir-handle {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+  }
+
+  .dir-arrow {
+    color: var(--ink-faint);
+    transition: transform 0.16s ease, color 0.16s ease;
+  }
+
+  .directory a:hover .dir-name {
+    color: var(--pop-sky);
+  }
+
+  .directory a:hover .dir-arrow {
+    color: var(--pop-sky);
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 780px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .directory a {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .dir-handle {
+      grid-column: 1 / -1;
+      order: 3;
+      margin-top: -6px;
+    }
+  }
+</style>

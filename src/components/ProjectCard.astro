@@ -1,0 +1,365 @@
+---
+import type { Project } from "../data/projects";
+
+interface Props {
+  project: Project;
+  index: number;
+}
+
+const { project, index } = Astro.props;
+const catalogNo = String(index + 1).padStart(2, "0");
+const showStatus = project.status && project.status !== "active";
+const statusLabel = project.status === "coming-soon" ? "coming soon" : project.status;
+---
+
+<article
+  class="sleeve"
+  data-categories={project.categories.join("|")}
+  style={`--c-light: ${project.accent}; --c-dark: ${project.accentDark};`}
+>
+  <a
+    class="sleeve-stage"
+    href={project.href}
+    target="_blank"
+    rel="noopener noreferrer"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <span class="catalog-no">{catalogNo}</span>
+    {showStatus && <span class="stage-status">{statusLabel}</span>}
+
+    {project.screenshot ? (
+      <div class="shot-frame">
+        {project.screenshotDark ? (
+          <>
+            <img
+              class="shot only-light"
+              src={project.screenshot}
+              alt={project.screenshotAlt ?? ""}
+              loading="lazy"
+            />
+            <img
+              class="shot only-dark"
+              src={project.screenshotDark}
+              alt={project.screenshotAlt ?? ""}
+              loading="lazy"
+            />
+          </>
+        ) : (
+          <img
+            class="shot"
+            src={project.screenshot}
+            alt={project.screenshotAlt ?? ""}
+            loading="lazy"
+          />
+        )}
+      </div>
+    ) : (
+      <div class="fallback-stage">
+        <span class="fallback-ring"></span>
+        {project.iconDark ? (
+          <>
+            <img class="fallback-icon only-light" src={project.icon} alt="" width="72" height="72" loading="lazy" />
+            <img class="fallback-icon only-dark" src={project.iconDark} alt="" width="72" height="72" loading="lazy" />
+          </>
+        ) : (
+          <img class="fallback-icon" src={project.icon} alt="" width="72" height="72" loading="lazy" />
+        )}
+      </div>
+    )}
+  </a>
+
+  <div class="sleeve-body">
+    <div class="sleeve-head">
+      <a
+        class="app-icon-wrap"
+        href={project.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        {project.iconDark ? (
+          <>
+            <img class="app-icon only-light" src={project.icon} alt="" width="44" height="44" loading="lazy" />
+            <img class="app-icon only-dark" src={project.iconDark} alt="" width="44" height="44" loading="lazy" />
+          </>
+        ) : (
+          <img class="app-icon" src={project.icon} alt="" width="44" height="44" loading="lazy" />
+        )}
+      </a>
+
+      <div class="head-meta">
+        <h3>
+          <a href={project.href} target="_blank" rel="noopener noreferrer">
+            {project.name}
+          </a>
+        </h3>
+        <p class="platforms">{project.platforms.join(" · ")}</p>
+      </div>
+    </div>
+
+    <p class="description">{project.description}</p>
+
+    <div class="sleeve-links">
+      {project.links.map((link, i) => (
+        <a
+          class:list={["sleeve-link", { primary: i === 0 }]}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>{link.label}</span>
+          {i === 0 && (
+            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 11 11 5M6 5h5v5"></path>
+            </svg>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</article>
+
+<style>
+  .sleeve {
+    --c: var(--c-light);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    background: var(--surface-elevated);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition:
+      transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.2s ease,
+      box-shadow 0.24s ease;
+  }
+
+  :global(html.dark) .sleeve {
+    --c: var(--c-dark);
+  }
+
+  .sleeve:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--c) 48%, var(--line));
+  }
+
+  .sleeve[hidden] {
+    display: none;
+  }
+
+  .sleeve-stage {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 224px;
+    padding: 34px 22px 0;
+    background-color: color-mix(in srgb, var(--c) 8%, var(--surface));
+    background-image: radial-gradient(color-mix(in srgb, var(--c) 18%, transparent) 1px, transparent 1px);
+    background-size: 16px 16px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    text-decoration: none;
+  }
+
+  .catalog-no {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+  }
+
+  .stage-status {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 40%, var(--line));
+    padding: 2px 9px;
+    border-radius: var(--radius-pill);
+  }
+
+  .shot-frame {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+    border-bottom: 0;
+    background: var(--bg);
+    box-shadow: var(--shadow-shot);
+    transform: translateY(4px);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sleeve:hover .shot-frame {
+    transform: translateY(-2px);
+  }
+
+  .shot {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .fallback-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 24px;
+  }
+
+  .fallback-ring {
+    position: absolute;
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    border: 1.5px dashed color-mix(in srgb, var(--c) 45%, transparent);
+  }
+
+  .fallback-icon {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-shot);
+  }
+
+  .sleeve-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px 22px 22px;
+    flex: 1;
+  }
+
+  .sleeve-head {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+
+  .app-icon-wrap {
+    flex: none;
+    border-radius: 11px;
+  }
+
+  .app-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    object-fit: cover;
+    border: 1px solid var(--line);
+  }
+
+  .head-meta {
+    min-width: 0;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 650;
+  }
+
+  h3 a {
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  h3 a:hover {
+    color: var(--c);
+  }
+
+  .platforms {
+    margin-top: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+  }
+
+  .description {
+    font-size: 0.93rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .sleeve-links {
+    margin-top: auto;
+    padding-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .sleeve-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .sleeve-link:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: var(--surface);
+  }
+
+  .sleeve-link.primary {
+    color: var(--c);
+    border-color: color-mix(in srgb, var(--c) 32%, var(--line));
+    background: color-mix(in srgb, var(--c) 9%, transparent);
+    font-weight: 550;
+  }
+
+  .sleeve-link.primary:hover {
+    color: #ffffff;
+    background: var(--c);
+    border-color: var(--c);
+  }
+
+  :global(html.dark) .sleeve-link.primary:hover {
+    color: #0f111e;
+  }
+
+  @media (max-width: 520px) {
+    .sleeve-stage {
+      height: 196px;
+      padding: 32px 16px 0;
+    }
+
+    .sleeve-body {
+      padding: 18px;
+    }
+  }
+</style>

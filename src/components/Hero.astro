@@ -1,0 +1,339 @@
+---
+import { site } from "../data/site";
+
+const blog = site.socials.find((s) => s.href.includes("mudkip.me"));
+const github = site.socials.find((s) => s.href.includes("github.com"));
+---
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="hero-kicker">
+        <span class="kicker-dots" aria-hidden="true">
+          <i class="c-amber"></i>
+          <i class="c-sky"></i>
+          <i class="c-mint"></i>
+          <i class="c-coral"></i>
+        </span>
+        <span>{site.domain}</span>
+      </div>
+
+      <h1>{site.headline}</h1>
+      <p class="hero-intro">{site.intro}</p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#apps">
+          <span>Browse apps</span>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 3.5v9m0 0 3.5-3.5M8 12.5 4.5 9"></path>
+          </svg>
+        </a>
+        {blog && (
+          <a class="btn" href={blog.href} target="_blank" rel="noopener noreferrer">
+            <span>mudkip.me</span>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 11 11 5M6 5h5v5"></path>
+            </svg>
+          </a>
+        )}
+        {github && (
+          <a class="btn" href={github.href} target="_blank" rel="noopener noreferrer">
+            <span>GitHub</span>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 11 11 5M6 5h5v5"></path>
+            </svg>
+          </a>
+        )}
+      </div>
+    </div>
+
+    <div class="hero-stage">
+      <button
+        type="button"
+        class="disc-stage"
+        id="carmel-disc"
+        aria-pressed="false"
+        aria-label="Spin the Carmel Works disc"
+      >
+        <span class="orbit-ring" aria-hidden="true"></span>
+        <span class="floater f-sky" aria-hidden="true"></span>
+        <span class="floater f-amber" aria-hidden="true"></span>
+        <span class="floater f-violet" aria-hidden="true"></span>
+        <span class="floater f-mint" aria-hidden="true"></span>
+        <span class="icon-circle disc-core">
+          <img src="/icon.png" alt="Carmel Works icon" width="176" height="176" />
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const disc = document.getElementById("carmel-disc");
+    if (!disc) return;
+    disc.addEventListener("click", () => {
+      const spinning = disc.classList.toggle("is-spinning");
+      disc.setAttribute("aria-pressed", String(spinning));
+    });
+  })();
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    padding: clamp(52px, 8vw, 96px) 0 clamp(44px, 6vw, 72px);
+    background-image: radial-gradient(var(--dot-grid) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.75fr);
+    gap: clamp(32px, 6vw, 64px);
+    align-items: center;
+  }
+
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 12px 5px 9px;
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+
+  .kicker-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .kicker-dots i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .c-amber { background: var(--pop-amber); }
+  .c-sky { background: var(--pop-sky); }
+  .c-mint { background: var(--pop-mint); }
+  .c-coral { background: var(--pop-coral); }
+
+  h1 {
+    font-size: clamp(2.25rem, 5.2vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    max-width: 15ch;
+    text-wrap: balance;
+  }
+
+  .hero-intro {
+    margin-top: 18px;
+    max-width: 50ch;
+    font-size: clamp(1rem, 1.8vw, 1.12rem);
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    font-size: 0.9rem;
+    font-weight: 550;
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .btn:hover {
+    border-color: var(--line-strong);
+    background: var(--surface);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: color-mix(in srgb, var(--ink) 88%, var(--pop-sky));
+    border-color: transparent;
+  }
+
+  .hero-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .disc-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 232px;
+    height: 232px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--line-strong);
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease;
+  }
+
+  .disc-stage:hover .orbit-ring {
+    transform: scale(1.04) rotate(12deg);
+    border-color: var(--pop-sky);
+  }
+
+  .disc-core {
+    position: relative;
+    width: 174px;
+    height: 174px;
+    box-shadow:
+      0 18px 40px -16px rgba(27, 30, 53, 0.38),
+      0 0 0 6px var(--bg);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .disc-stage:hover .disc-core {
+    transform: scale(1.04);
+  }
+
+  .disc-stage.is-spinning .disc-core img {
+    animation: disc-spin 8s linear infinite;
+  }
+
+  .disc-stage.is-spinning .orbit-ring {
+    animation: disc-spin-reverse 20s linear infinite;
+    border-color: var(--pop-violet);
+  }
+
+  .floater {
+    position: absolute;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .f-sky {
+    top: 14px;
+    left: 16px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--pop-sky);
+  }
+
+  .f-amber {
+    top: 32px;
+    right: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--pop-amber);
+  }
+
+  .f-violet {
+    bottom: 22px;
+    right: 12px;
+    width: 11px;
+    height: 22px;
+    border-radius: var(--radius-pill);
+    background: var(--pop-violet);
+    transform: rotate(-18deg);
+  }
+
+  .f-mint {
+    bottom: 18px;
+    left: 20px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--pop-mint);
+  }
+
+  .disc-stage:hover .f-sky {
+    transform: translate(-5px, -5px) scale(1.1);
+  }
+
+  .disc-stage:hover .f-amber {
+    transform: translate(6px, -4px) scale(1.12);
+  }
+
+  .disc-stage:hover .f-violet {
+    transform: translate(5px, 5px) rotate(-6deg);
+  }
+
+  .disc-stage:hover .f-mint {
+    transform: translate(-5px, 5px) scale(1.1);
+  }
+
+  @keyframes disc-spin {
+    from { transform: scale(1.04) rotate(0deg); }
+    to { transform: scale(1.04) rotate(360deg); }
+  }
+
+  @keyframes disc-spin-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+
+  @media (max-width: 780px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-stage {
+      order: -1;
+      justify-content: flex-start;
+    }
+
+    .disc-stage {
+      width: 148px;
+      height: 148px;
+    }
+
+    .disc-core {
+      width: 112px;
+      height: 112px;
+    }
+
+    .f-sky { width: 12px; height: 12px; top: 8px; left: 8px; }
+    .f-amber { width: 10px; height: 10px; top: 20px; right: 2px; }
+    .f-violet { width: 8px; height: 16px; bottom: 12px; right: 6px; }
+    .f-mint { width: 10px; height: 10px; bottom: 12px; left: 10px; }
+  }
+</style>

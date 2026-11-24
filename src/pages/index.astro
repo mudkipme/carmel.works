@@ -1,0 +1,164 @@
+---
+import About from "../components/About.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getFilterCategories, projects } from "../data/projects";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const categories = getFilterCategories(projects);
+const countLabel = String(projects.length).padStart(2, "0");
+---
+
+<BaseLayout>
+  <Header />
+
+  <main id="main">
+    <Hero />
+
+    <section id="apps" class="apps-section" aria-labelledby="apps-heading">
+      <div class="wrap">
+        <div class="section-bar">
+          <div class="heading-wrap">
+            <h2 id="apps-heading">Apps</h2>
+            <span class="count-badge">{countLabel}</span>
+          </div>
+
+          {categories.length > 1 && (
+            <div class="filters" role="group" aria-label="Filter apps by category">
+              <button type="button" class="filter-chip is-active" data-filter="all" aria-pressed="true">
+                All
+              </button>
+              {categories.map((category) => (
+                <button type="button" class="filter-chip" data-filter={category} aria-pressed="false">
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div class="project-grid" id="project-grid">
+          {projects.map((project, index) => (
+            <ProjectCard project={project} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <About />
+  </main>
+
+  <Footer />
+
+  <script is:inline>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll(".filter-chip"));
+      const cards = Array.from(document.querySelectorAll("#project-grid .sleeve"));
+      if (!buttons.length || !cards.length) return;
+
+      const applyFilter = (value) => {
+        for (const btn of buttons) {
+          const active = btn.dataset.filter === value;
+          btn.classList.toggle("is-active", active);
+          btn.setAttribute("aria-pressed", String(active));
+        }
+
+        for (const card of cards) {
+          const categories = (card.dataset.categories || "").split("|");
+          const visible = value === "all" || categories.includes(value);
+          card.hidden = !visible;
+        }
+      };
+
+      for (const btn of buttons) {
+        btn.addEventListener("click", () => {
+          applyFilter(btn.dataset.filter || "all");
+        });
+      }
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  .apps-section {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(56px, 8vw, 92px);
+  }
+
+  .section-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    margin-bottom: 28px;
+  }
+
+  .heading-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .heading-wrap h2 {
+    font-size: clamp(1.5rem, 3vw, 1.85rem);
+    font-weight: 700;
+  }
+
+  .count-badge {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .filter-chip {
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.83rem;
+    font-weight: 550;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .filter-chip:hover {
+    color: var(--ink);
+  }
+
+  .filter-chip.is-active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  @media (max-width: 780px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
