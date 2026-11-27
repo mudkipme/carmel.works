@@ -5,11 +5,6 @@ export interface SocialLink {
   rel?: string;
 }
 
-export interface TopicTag {
-  label: string;
-  color: "sky" | "mint" | "amber" | "coral" | "violet";
-}
-
 export const site = {
   name: "Carmel Works",
   domain: "carmel.works",
@@ -22,12 +17,10 @@ export const site = {
   headline: "Indie apps for self-hosting & the things you love.",
   intro:
     "Built by Mudkip — open-source tools for homelabs, personal media shelves, and everyday hobbies.",
-  topics: [
-    { label: "self-hosted", color: "mint" },
-    { label: "homelab", color: "sky" },
-    { label: "local-first", color: "amber" },
-    { label: "anime & games", color: "coral" },
-  ] satisfies TopicTag[],
+  sponsor: {
+    label: "Sponsor on Ko-fi",
+    href: "https://ko-fi.com/mudkipme",
+  },
   socials: [
     {
       label: "Mudkip Mud Sport",
